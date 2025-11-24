@@ -1,0 +1,12 @@
+# Custom Ollama image with curl for healthcheck
+FROM ollama/ollama:latest
+
+# Install curl for healthcheck (Ubuntu/Debian based)
+RUN apt-get update && \
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+
+# Keep the original entrypoint
+ENTRYPOINT ["/bin/ollama"]
+CMD ["serve"]
+

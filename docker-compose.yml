@@ -1,0 +1,95 @@
+services:
+  # Ollama LLM Server
+  ollama:
+    build:
+      context: .
+      dockerfile: Dockerfile.ollama
+    container_name: blender-ollama-ollama
+    volumes:
+      - ollama_data:/root/.ollama
+    ports:
+      - "11434:11434"
+    environment:
+      - OLLAMA_HOST=0.0.0.0
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '4'
+          memory: 8G
+        reservations:
+          cpus: '2'
+          memory: 4G
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    networks:
+      - blender-ollama-network
+
+  # MCP Server
+  mcp-server:
+    build:
+      context: .
+      dockerfile: Dockerfile.optimized
+    container_name: blender-ollama-mcp
+    volumes:
+      # Mount databases directory for persistence
+      - ./databases:/app/databases
+      # Mount output directory for renders
+      - ./output:/app/output
+      # Mount temp_audio for voice commands
+      - ./temp_audio:/app/temp_audio
+      # Optional: mount Blender project files
+      - ./blender_projects:/app/blender_projects
+    environment:
+      - OLLAMA_URL=http://ollama:11434
+      - BLENDER_HOST=host.docker.internal
+      - BLENDER_PORT=9876
+      - PYTHONUNBUFFERED=1
+    depends_on:
+      ollama:
+        condition: service_healthy
+        required: true
+    networks:
+      - blender-ollama-network
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.path.insert(0, '/app'); import mcp_server; print('OK')"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 2G
+        reservations:
+          cpus: '1'
+          memory: 512M
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+        window: 120s
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+volumes:
+  ollama_data:
+    driver: local
+
+networks:
+  blender-ollama-network:
+    driver: bridge
+
