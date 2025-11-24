@@ -1,0 +1,40 @@
+========================================
+QUICK START - ADDON INTEGRATION READY
+========================================
+
+✅ All addons detected and integrated:
+   - ND (Modeling)
+   - DMX (Lighting)
+   - Sanctus - Library (Materials)
+
+========================================
+TO TEST EVERYTHING:
+========================================
+
+1. Open Blender
+2. Go to Scripting workspace
+3. Run this:
+
+import bpy
+bpy.ops.text.open(filepath=r"F:\mcp server\setup_and_test_addons.py")
+
+4. Click "Run Script"
+5. Press F12 to render
+
+========================================
+TO GENERATE MARKETING RENDERS:
+========================================
+
+1. Open Blender
+2. Go to Scripting workspace
+3. Run this:
+
+import bpy
+bpy.ops.text.open(filepath=r"F:\mcp server\run_fullscale_test.py")
+
+4. Click "Run Script"
+
+========================================
+EVERYTHING IS READY! 🎉
+========================================
+

@@ -1,0 +1,17 @@
+{
+  "mcpServers": {
+    "blender-ollama": {
+      "command": "python",
+      "args": [
+        "F:\\mcp server\\mcp_server.py"
+      ],
+      "env": {
+        "OLLAMA_URL": "http://localhost:11434",
+        "BLENDER_HOST": "localhost",
+        "BLENDER_PORT": "9876",
+        "BLENDER_OLLAMA_PATH": "C:\\Users\\User\\Desktop\\blender-ollama"
+      }
+    }
+  }
+}
+
