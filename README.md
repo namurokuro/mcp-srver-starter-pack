@@ -1,4 +1,4 @@
-# Blender-Ollama MCP Server
+# Blender Evolving MCP generator
 
 Model Context Protocol (MCP) server for integrating Blender-Ollama system with Cursor.
 
